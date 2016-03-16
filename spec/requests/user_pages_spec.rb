@@ -33,9 +33,9 @@ describe 'UserPages' do
 
         it { should have_title('Sign up') }
         it { should have_content('error') }
-        it { should have_selector('div.alert.alert-error', 'Name') }
-        it { should have_selector('div.alert.alert-error', 'Email') }
-        it { should have_selector('div.alert.alert-error', 'Password') }
+        it { should have_error_message('Name') }
+        it { should have_error_message('Email') }
+        it { should have_error_message('Password') }
       end
     end
 
