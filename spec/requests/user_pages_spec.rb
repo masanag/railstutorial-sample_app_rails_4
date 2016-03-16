@@ -33,9 +33,9 @@ describe 'UserPages' do
 
         it { should have_title('Sign up') }
         it { should have_content('error') }
-        it { should have_selector('div.alert.alert-error', 'Name') }
-        it { should have_selector('div.alert.alert-error', 'Email') }
-        it { should have_selector('div.alert.alert-error', 'Password') }
+        it { should have_error_message('Name') }
+        it { should have_error_message('Email') }
+        it { should have_error_message('Password') }
       end
     end
 
@@ -55,6 +55,7 @@ describe 'UserPages' do
         before { click_button submit }
         let(:user) { User.find_by(email: 'user@example.com') }
 
+        it { should have_link('Sign out') }
         it { should have_title(user.name) }
         it { should have_selector('div.alert.alert-success', text: 'Welcome') }
       end
