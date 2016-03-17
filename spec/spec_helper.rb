@@ -40,4 +40,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   config.include Capybara::DSL
+  # FactoryGirlの記述を省略可能にする
+  config.include FactoryGirl::Syntax::Methods
 end
