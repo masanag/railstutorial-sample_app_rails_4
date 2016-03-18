@@ -73,6 +73,18 @@ describe 'Authentication' do
           it { should have_title('Sign in') }
         end
       end
+
+      describe 'as non-admin user' do
+        let(:user) { create(:user) }
+        let(:non_admin) { create(:user) }
+
+        before { sign_in non_admin, no_capybara: true }
+
+        describe 'submitting a DELETE request to the Users#destroy action' do
+          before { delete user_path(user) }
+          specify { expect(response).to redirect_to(root_path) }
+        end
+      end
     end
 
     describe 'as wrong user' do
