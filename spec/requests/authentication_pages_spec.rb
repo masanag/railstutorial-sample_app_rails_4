@@ -14,6 +14,10 @@ describe 'Authentication' do
 
       it { should have_title('Sign in') }
       it { should have_error_message('Invalid') }
+      it { should_not have_link('Profile') }
+      it { should_not have_link('Settings') }
+      it { should_not have_link('Sign out') }
+      it { should have_link('Sign in', href: signin_path) }
 
       describe 'after visiting anoter page' do
         before { click_link 'Home' }
@@ -22,7 +26,7 @@ describe 'Authentication' do
     end
 
     describe 'with valid information' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { create(:user) }
       before { sign_in user }
 
       it { should have_title(user.name) }
@@ -36,6 +40,16 @@ describe 'Authentication' do
         before { click_link 'Sign out' }
         it { should have_link('Sign in') }
       end
+
+      # describe 'visiting the sign in page' do
+      #   before { get signin_path }
+      #   specify { expect(response).to redirect_to(root_url) }
+      # end
+
+      # describe 'visiting the sign up page' do
+      #   before { get signup_path }
+      #   specify { expect(response).to redirect_to(root_url) }
+      # end
     end
   end
 
@@ -46,9 +60,7 @@ describe 'Authentication' do
       describe 'when attempting to visit a protected page' do
         before do
           visit edit_user_path(user)
-          fill_in 'Email', with: user.email
-          fill_in 'Password', with: user.password
-          click_button 'Sign in'
+          sign_in(user)
         end
 
         describe 'after signing in' do
