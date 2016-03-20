@@ -1,5 +1,6 @@
 #
 class UsersController < ApplicationController
+  before_action :restrict_registration, only: [:new, :create]
   before_action :signed_in_user, only: [:index, :edit, :update]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: :destroy
@@ -13,11 +14,12 @@ class UsersController < ApplicationController
   end
 
   def new
-    # redirect_to root_url if signed_in?
+    redirect_to root_url if signed_in?
     @user = User.new
   end
 
   def create
+    redirect_to root_url if signed_in?
     @user = User.new(user_params)
     if @user.save
       sign_in @user
@@ -68,5 +70,9 @@ class UsersController < ApplicationController
 
   def admin_user
     redirect_to(root_path) unless current_user.admin?
+  end
+
+  def restrict_registration
+    redirect_to root_url, notice: 'You are already registered' if signed_in?
   end
 end
