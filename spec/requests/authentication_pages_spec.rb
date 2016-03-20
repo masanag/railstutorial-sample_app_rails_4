@@ -91,6 +91,18 @@ describe 'Authentication' do
         end
       end
 
+      describe 'as admin user' do
+        let(:admin) { create(:admin) }
+        before { sign_in admin, no_capybara: true }
+
+        describe 'should not be able to delete themselves via #destroy' do
+          specify do
+            expect { delete user_path(admin) }
+              .not_to change(User, :count).by(-1)
+          end
+        end
+      end
+
       describe 'as non-admin user' do
         let(:user) { create(:user) }
         let(:non_admin) { create(:user) }
