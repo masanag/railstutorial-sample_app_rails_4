@@ -40,20 +40,25 @@ describe 'Authentication' do
         before { click_link 'Sign out' }
         it { should have_link('Sign in') }
       end
-
-      # describe 'visiting the sign in page' do
-      #   before { get signin_path }
-      #   specify { expect(response).to redirect_to(root_url) }
-      # end
-
-      # describe 'visiting the sign up page' do
-      #   before { get signup_path }
-      #   specify { expect(response).to redirect_to(root_url) }
-      # end
     end
   end
 
   describe 'authorization' do
+    describe 'as signed-in user' do
+      let(:user) { create(:user) }
+      before { sign_in user, no_capybara: true }
+
+      describe 'cannot access #new action' do
+        before { get new_user_path }
+        specify { expect(response).to redirect_to(root_path) }
+      end
+
+      describe 'cannot access #create action' do
+        before { post users_path(user) }
+        specify { expect(response).to redirect_to(root_path) }
+      end
+    end
+
     describe 'for non-signed-in users' do
       let(:user) { create(:user) }
 
