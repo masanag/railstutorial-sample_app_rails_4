@@ -60,6 +60,29 @@ describe 'User pages' do
     end
   end
 
+  describe 'pagination' do
+    let(:user) { create(:user) }
+    before do
+      40.times { create(:micropost, user: user) }
+      visit user_path(user)
+    end
+    after { Micropost.delete_all }
+    it { should have_selector('div.pagination') }
+    it 'should list each micropost' do
+      user.microposts.paginate(page: 1).each do |micropost|
+        expect(page).to have_selector('li', text: micropost.content)
+      end
+    end
+    context 'when access page=2' do
+      before { visit user_path(user, page: 2) }
+      it 'should list each micropost' do
+        user.microposts.paginate(page: 2).each do |micropost|
+          expect(page).to have_selector('li', text: micropost.content)
+        end
+      end
+    end
+  end
+
   describe 'signup page' do
     before { visit signup_path }
 
