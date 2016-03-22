@@ -55,4 +55,14 @@ describe 'Micropost pages' do
       end
     end
   end
+
+  describe 'micropost posted another user' do
+    let(:another_user) { create(:user) }
+    before do
+      Micropost.delete_all
+      create(:micropost, user: another_user)
+      visit root_path
+    end
+    it { should_not have_content 'delete' }
+  end
 end
