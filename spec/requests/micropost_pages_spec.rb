@@ -17,6 +17,7 @@ describe "Micropost pages" do
       describe 'error messages' do
         before { click_button 'Post' }
         it { should have_content('error') }
+        it { should have_content('0 microposts') }
       end
     end
 
@@ -24,6 +25,21 @@ describe "Micropost pages" do
       before { fill_in 'micropost_content', with: 'Lorem ipsum' }
       it 'should create a micropost' do
         expect { click_button 'Post' }.to change(Micropost, :count).by(1)
+      end
+
+      context 'when a micropost posted' do
+        before { click_button 'Post' }
+
+        it { should have_content('1 micropost') }
+        it { should_not have_content('1 microposts') }
+
+        context 'and another done' do
+          before do
+            fill_in 'micropost_content', with: 'Lorem ipusum'
+            click_button 'Post'
+          end
+          it { should have_content('2 microposts') }
+        end
       end
     end
   end
