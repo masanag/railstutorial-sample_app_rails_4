@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Micropost pages" do
+describe 'Micropost pages' do
   subject { page }
 
   let(:user) { create(:user) }
