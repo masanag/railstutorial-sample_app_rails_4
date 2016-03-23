@@ -52,6 +52,34 @@ describe 'Static pages' do
         end
       end
     end
+
+    describe 'for signed-in users' do
+      let(:user) { create(:user) }
+      before do
+        create(:micropost, user: user, content: 'Lorem')
+        create(:micropost, user: user, content: 'Ipsum')
+        sign_in user
+        visit root_path
+      end
+
+      it 'should render the user\'s feed' do
+        user.feed.each do |item|
+          expect(page).to have_selector("li##{item.id}", text: item.content)
+
+        end
+      end
+
+      describe 'follwer/following counts' do
+        let(:other_user) { create(:user) }
+        before do
+          other_user.follow!(user)
+          visit root_path
+        end
+
+        it { should have_link('0 following', href: following_user_path(user)) }
+        it { should have_link('1 followers', href: followers_user_path(user)) }
+      end
+    end
   end
 
   describe 'Help page' do
