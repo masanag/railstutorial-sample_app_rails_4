@@ -76,7 +76,6 @@ describe 'User pages' do
           expect do
             click_button 'Follow'
           end.to change(other_user.followers, :count).by(1)
-
         end
 
         describe 'toggling the button' do
